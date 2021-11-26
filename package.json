@@ -1,0 +1,7 @@
+{
+	"name": "com.fabioiotti.unityadvancedinspector",
+	"version": "0.1.0",
+	"displayName": "Unity Advanced Inspector",
+	"description": "Inspector augmenting utilities for Unity.",
+	"unity": "2020.3"
+}
