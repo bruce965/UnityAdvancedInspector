@@ -174,14 +174,7 @@ namespace UnityAdvancedInspector.Editor
                     throw new ArgumentException("Only \"return by-ref\" methods are supported.", nameof(getter));
 
                 var assemblyName = new AssemblyName($"{typeof(ReflectionExtensions).FullName}.ResolveByRef_{getter.ReflectedType.FullName}.{getter.Name}");
-                var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(
-                    assemblyName,
-                    #if DEBUG
-                    AssemblyBuilderAccess.RunAndSave
-                    #else
-                    AssemblyBuilderAccess.Run
-                    #endif
-                    );
+                var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
 
                 var moduleName = assemblyName.FullName;
                 var fileName = $"{moduleName}.dll";
@@ -225,12 +218,6 @@ namespace UnityAdvancedInspector.Editor
                 var type = typeBuilder.CreateType();
                 var getMethod = type.GetMethod(getMethodBuilder.Name);
                 var setMethod = type.GetMethod(setMethodBuilder.Name);
-
-                #if DEBUG
-
-                //assemblyBuilder.Save(fileName);
-
-                #endif
 
                 return new GetSet(
                     get: target => getMethod.Invoke(null, new[] { target }),

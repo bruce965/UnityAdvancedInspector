@@ -3,8 +3,13 @@ using UnityEngine;
 
 namespace UnityAdvancedInspector
 {
+    /// <summary>
+    /// Show field or property in inspector even if it's not serializable.
+    /// <br/>
+    /// Requires <see cref="AdvancedInspectorAttribute"/> on the class.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
-    public class InspectorFieldAttribute : PropertyAttribute
+    public class InspectorField : PropertyAttribute
     {
         /// <summary>
         /// Optional label to display in front of the text field.

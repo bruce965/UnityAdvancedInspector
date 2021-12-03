@@ -4,10 +4,10 @@ using UnityEngine;
 namespace UnityAdvancedInspector
 {
     /// <summary>
-    /// Replace Unity's default editor and enable advanced inspector editor.
+    /// Replace Unity's default editor and enable advanced inspector.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-    public class InspectorEditorAttribute : PropertyAttribute
+    public class AdvancedInspectorAttribute : PropertyAttribute
     {
         /// <summary>
         /// Draw the default inspector editor before the custom one.

@@ -4,35 +4,60 @@ using UnityEngine;
 
 namespace UnityAdvancedInspector.Editor
 {
-    [CustomPropertyDrawer(typeof(InspectorFieldAttribute))]
+    [CustomPropertyDrawer(typeof(InspectorField))]
     class InspectorFieldDrawer : PropertyDrawer
     {
-        public new InspectorFieldAttribute attribute => (InspectorFieldAttribute)base.attribute;
+        static readonly GUIContent _tempLabel = new GUIContent();
+
+        public new InspectorField attribute
+            => (InspectorField)base.attribute;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             var guiEnabled = GUI.enabled;
             GUI.enabled = guiEnabled && !attribute.Disabled;
 
-            EditorGUI.PropertyField(position, property, attribute.Label == null ? label : new GUIContent(attribute.Label), true);
+            EditorGUI.PropertyField(position, property, attribute.Label == null ? label : TempContent(attribute.Label), true);
 
             GUI.enabled = guiEnabled;
         }
 
-        public static T LayoutField<T>(string label, T value, params GUILayoutOption[] options)
+        public static T EditorField<T>(Rect position, GUIContent label, T value, GUIStyle style)
+            => (T)EditorField(typeof(T), position, label, value, style);
+
+        public static object EditorField(Type type, Rect position, GUIContent label, object value, GUIStyle style)
         {
-            switch (typeof(T))
+            if (style == null)
+                style = EditorStyles.textField;
+
+            switch (type)
             {
                 case var t when t == typeof(string):
-                    return (T)(object)EditorGUILayout.TextField(label, (string)(object)value, options);
+                    return EditorGUI.TextField(position, label, (string)value, style);
 
                 case var t when t == typeof(int):
-                    return (T)(object)EditorGUILayout.IntField(label, (int)(object)value, options);
+                    return EditorGUI.IntField(position, label, (int)value, style);
+
+                case var t when t.IsByRef:
+                    return EditorGUI.ObjectField(position, label, (UnityEngine.Object)value, type, true);
 
                 default:
-                    EditorGUILayout.LabelField(label, $"Unsupported field type '{typeof(T).Name}'.");
+                    var previousColor = GUI.color;
+                    GUI.color = Color.red;
+
+                    EditorGUI.LabelField(position, label, TempContent($"Unsupported field type '{type.Name}'."), style);
+
+                    GUI.color = previousColor;
                     return value;
             }
+        }
+
+        public static GUIContent TempContent(string label)
+        {
+            _tempLabel.image = null;
+            _tempLabel.text = label;
+            _tempLabel.tooltip = null;
+            return _tempLabel;
         }
     }
 }
