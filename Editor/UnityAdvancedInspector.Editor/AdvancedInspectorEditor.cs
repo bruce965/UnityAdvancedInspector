@@ -43,7 +43,7 @@ namespace UnityAdvancedInspector.Editor
         void DrawMember<T>(InspectorField inspector, Object target, MemberInfo member)
         {
             var guiEnabled = GUI.enabled;
-            GUI.enabled = guiEnabled && !inspector.Disabled;
+            GUI.enabled = guiEnabled && !inspector.ReadOnly;
 
             var label = inspector.Label ?? member.Name;
 

@@ -15,7 +15,7 @@ namespace UnityAdvancedInspector.Editor
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             var guiEnabled = GUI.enabled;
-            GUI.enabled = guiEnabled && !attribute.Disabled;
+            GUI.enabled = guiEnabled && !attribute.ReadOnly;
 
             EditorGUI.PropertyField(position, property, attribute.Label == null ? label : TempContent(attribute.Label), true);
 

@@ -21,6 +21,6 @@ namespace UnityAdvancedInspector
         /// Is this GUI element disabled (read-only)?
         /// </summary>
         /// <value></value>
-        public bool Disabled { get; set; } = false;
+        public bool ReadOnly { get; set; } = false;
     }
 }
